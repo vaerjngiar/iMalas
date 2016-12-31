@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+<script>
+{% block jquery %}
+$(".item-qty").change(function(){
+	// $(this).next(".btn-update").fadeIn();
+
+	// event.preventDefault();
+	// .prev(h1)
+	var item = $(this).prev("input[type='hidden']").val();
+	var qty = $(this).val()
+	var data = {
+		item: item,
+		qty: qty
+	}
+	console.log(data);
+	$.ajax({
+		type: "GET", // "POST"
+		url: "{% url 'cart' %}",
+		data: data,
+		success: function(data) {
+			$("#jquery-message").text("Added " + data.item_added + " Deleted " + data.deleted)
+			if (data.deleted){
+				$("#item-"+item).fadeOut();
+				$("#subtotal").text(data.subtotal);
+				$("#taxtotal").text(data.tax_total);
+				$("#carttotal").text(data.cart_total);
+			} else {
+				$("#item-line-total-"+item).text(data.line_total);
+				$("#subtotal").text(data.subtotal);
+				$("#taxtotal").text(data.tax_total);
+				$("#carttotal").text(data.cart_total);
+			}
+
+			if (data.total_items == 0 ) {
+				$(".table").fadeOut()
+				var template = "{% include 'carts/empty_cart.html' %}";
+				$(".main-content").html(template);
+
+			}
+
+			var message = ""
+			if (data.item_added) {
+				message = "New item added"
+			} else if (data.deleted){
+				message = "Item removed"
+			} else {
+				message = "Item updated"
+			}
+			showFlashMessage(message);
+			updateCartItemCount()
+			}, 
+		error: function(response, error) {
+			// console.log(response)
+			// console.log(error)
+			$("#add-form").submit()
+		}
+	})
+
+
+
+
+
+});
+
+{% endblock %}
+</script>
+
+{% block container %}
+
+    <section class="page-content">
+			<div class="container">
+	            <div class="row">
+					<div class="col-md-12">
+						<ul class="page-menu">
+							<li><a href="{% url 'products' %}">Home</a></li>
+							<li class="active"><a href="#">Bestseller Product</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<!-- CATEGORY-MENU-LIST START -->
+                        {% include "products/category.html" %}
+						<!-- END CATEGORY-MENU-LIST -->
+						<!-- shop-filter start -->
+
+						<!-- shop-filter start -->
+
+					</div>
+					<div class="col-md-9 col-xs-12">
+						<!-- START PRODUCT-BANNER -->
+						<div class="product-banner">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="banner">
+										<a href="#"><img src="{% static 'img/banner/12.jpg' %}" alt="Product Banner"></a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- END PRODUCT-BANNER -->
+						<!-- START PRODUCT-AREA -->
+						<!-- Start Shopping-Cart -->
+                    {% if object.cartitem_set.count < 1 %}
+
+                        {% include "carts/empty_cart.html" %}
+                        {% else %}
+						<div class="shopping-cart">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="cart-title">
+										<h2 class="entry-title">Shopping Cart</h2>
+									</div>
+									<!-- Start Table -->
+									<div class="table-responsive">
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<td class="text-center">Image</td>
+													<td class="text-left">Product Name</td>
+
+													<td class="text-left">Quantity</td>
+													<td class="text-right">Unit Price</td>
+													<td class="text-right">Total</td>
+												</tr>
+											</thead>
+											<tbody>
+                                            {% for item in object.cartitem_set.all %}
+                                                {% with product=item.product %}
+												<tr>
+													<td class="text-center">
+														<a href="{{ item.item.get_absolute_url }}"><img class="img-thumbnail" src="{{ item.item.get_image_url }}" alt="#" /></a>
+													</td>
+													<td class="text-left">
+														<a href="{{ item.item.get_absolute_url }}">{{ item.item.get_title }}</a>
+													</td>
+
+													<td class="text-left">
+
+														<form action="." method="GET" ><input type='hidden' name='item' value='{{ item.item.id }}' /><input type='number' class='item-qty' name='qty' value='{{ item.quantity }}' /><input type='submit' class='btn-update btn btn-link' value='Update item' style='display:none;'/></form>
+                                                                <a href="{{ item.remove }}" class="btn btn-danger" data-toggle="tooltip" title="Remove">
+                                                                    <i class="fa fa-times-circle"></i>
+                                                                </a>
+
+
+
+													</td>
+													<td class="text-right">${{ item.item.get_price }}</td>
+													<td class="text-right">${{ item.line_item_total }}</td>
+												</tr>
+                                                {% endwith %}
+												{% endfor %}
+											</tbody>
+										</table>
+									</div>
+									<!-- End Table -->
+									<h3 class="title-group-3 gfont-1">What would you like to do next?</h3>
+									<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
+									<!-- Accordion start -->
+									<div class="accordion-cart">
+										<div class="panel-group" id="accordion">
+											<!-- Start Coupon -->
+											<div class="panel panel_default">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a class="accordion-trigger" data-toggle="collapse" data-parent="#accordion" href="#coupon">Use Coupon Code<i class="fa fa-caret-down"></i> </a>
+													</h4>
+												</div>
+												<div id="coupon" class="collapse ">
+													<div class="panel-body">
+														<div class="col-sm-2">
+															<p>Enter your coupon here</p>
+														</div>
+														<div class="input-group">
+															<input class="form-control" type="text" placeholder="Enter your coupon here" />
+															<button type="submit" class="btn btn-primary">Apply Coupon</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- End Coupon -->
+											<!-- Start Voucher -->
+											<div class="panel panel_default">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a class="accordion-trigger collapsed" data-toggle="collapse" data-parent="#accordion" href="#voucher">Use Gift Voucher <i class="fa fa-caret-down"></i> </a>
+													</h4>
+												</div>
+												<div id="voucher" class="collapse">
+													<div class="panel-body">
+														<div class="col-sm-2">
+															<p>Enter your gift voucher code here</p>
+														</div>
+														<div class="input-group">
+															<input class="form-control" type="text" placeholder="Enter your gift voucher code here" />
+															<button type="submit" class="btn btn-primary">Apply Voucher</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- Start Voucher -->
+											<!-- Start Shipping -->
+											<div class="panel panel_default">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a class="accordion-trigger collapsed" data-toggle="collapse" data-parent="#accordion" href="#shipping">Estimate Shipping & Taxes <i class="fa fa-caret-down"></i> </a>
+													</h4>
+												</div>
+												<div id="shipping" class="collapse">
+													<div class="panel-body">
+														<div class="col-sm-12">
+															<p>Enter your destination to get a shipping estimate.</p>
+														</div>
+														<div class="form-horizontal">
+															<div class="form-group">
+																<label class="col-sm-2 control-label"><sup>*</sup>Country</label>
+																<div class="col-sm-10">
+																	<select class="form-control">
+																		<option> --- Please Select --- </option>
+																		<option> Bangladesh </option>
+																		<option> United States </option>
+																		<option> United Kingdom </option>
+																		<option> Canada </option>
+																		<option> Malaysia </option>
+																		<option> United Arab Emirates </option>
+																	</select>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-2 control-label"><sup>*</sup>Region / State</label>
+																<div class="col-sm-10">
+																	<select class="form-control">
+																		<option> --- Please Select --- </option>
+																		<option> Aberdeen </option>
+																		<option> Bedfordshire </option>
+																		<option> Caerphilly </option>
+																		<option> Denbighshire </option>
+																		<option> East Ayrshire </option>
+																		<option> Falkirk </option>
+																	</select>
+																</div>
+															</div>
+															<div class="form-group">
+																<label class="col-sm-2 control-label"><sup>*</sup>Post Code</label>
+																<div class="col-sm-10">
+																	<input type="text" class="form-control" placeholder="Post Code" />
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- Start Shipping -->
+										</div>
+									</div>
+									<!-- Accordion end -->
+									<div class="row">
+										<div class="col-sm-4 col-sm-offset-8">
+											<table class="table table-bordered">
+												<tbody>
+													<tr>
+														<td class="text-right">
+															<strong>Sub-Total:</strong>
+														</td>
+														<td class="text-right">${{ object.subtotal }}</td>
+													</tr>
+                                                    <tr>
+														<td class="text-right">
+															<strong>Tax Estimated:</strong>
+														</td>
+														<td class="text-right">${{ object.tax_total }}</td>
+													</tr>
+													<tr>
+														<td class="text-right">
+															<strong>Total:</strong>
+														</td>
+														<td class="text-right">${{ object.total }}</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div class="shopping-checkout">
+										<a href="{% url 'products' %}" class="btn btn-default pull-left">Continue Shopping</a>
+										<a href="{% url 'checkout' %}" class="btn btn-primary pull-right">Checkout</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- End Shopping-Cart -->
+                    {% endif %}
+						<!-- END PRODUCT-AREA -->
+					</div>
+				</div>
+			</div>
+			<!-- START BRAND-LOGO-AREA -->
+			{% include "brands.html" %}
+			<!-- END BRAND-LOGO-AREA -->
+			<!-- START SUBSCRIBE-AREA -->
+			{% include "subscribe.html" %}
+			<!-- END SUBSCRIBE-AREA -->
+		</section>
+
+{% endblock %}

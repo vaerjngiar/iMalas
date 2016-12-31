@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+
+
+
+
+
+
+{% block container %}
+<section class="page-content">
+    <div class="container">
+    <div>
+    {% include "orders/order_summary_short.html" with order=order %}
+
+    <p><b>Please print for your records</b></p>
+
+    </div>
+</section>
+{% endblock %}

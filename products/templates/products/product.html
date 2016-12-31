@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+<script>
+{% block jquery %}
+
+
+function setPrice(){
+	var price = $(".variation_select option:selected").attr("data-price")
+
+	var sale_price = $(".variation_select option:selected").attr("data-sale-price")
+	if (sale_price != "" && sale_price != "None" && sale_price != null ) {
+	$("#price").html("<span>" + sale_price + " <small  class='og-price'>" + price  + "</small></span>");
+	} else {
+	$("#price").html(price);
+	}
+}
+setPrice()
+
+$(".variation_select").change(function(){
+	setPrice()
+	// var img = $(".variation_select option:selected").attr("data-img")
+	// $("img").attr("src", img);
+
+})
+
+
+
+// ajax add to cart
+
+
+
+	// $("#add-form").submit()
+
+
+
+
+
+{% endblock %}
+</script>
+
+{% block container %}
+    <div class="container">
+
+
+
+      <!-- Product Sidebar -->
+                <div class='col-sm-4'>
+
+                      <form id='add-form' method='GET' action="{% url 'cart' %}">
+
+                        {% if product.variation_set.count > 1 %}
+                            <span id='price'>{{ product.price }}</span>
+
+                            <select name='item' class='form-control variation_select'>
+
+                            {% for var_product  in object.variation_set.all %}
+                                <option data-sale-price="{{ var_product.sale_price }}" data-price="{{ var_product.price }}" value="{{ var_product.id }}">{{ var_product }}</option>
+
+                            {% endfor %}
+
+                            </select>
+                        {% else %}
+                            <input type="hidden" name='item' value='{{ object.variation_set.first.id }}' />
+                                <span class="current-price" id='price'>{% if object.variation_set.first.sale_price %}
+                                    {{ object.variation_set.first.sale_price  }}
+                                    <small class='og-price'>{{ object.variation_set.first.price }}</small>
+                                    {% else %}
+
+                                    {{ object.variation_set.first.price }}
+                                    {% endif %}
+                                 </span>
+
+                        {% endif %}
+                       <br/>
+                            <input class='form-control' type='number' name='qty' value='1' />
+                        <br/>
+                        <input id='submit-btn' type='submit' value='Add to Cart' class='btn btn-default' />
+                        </form>
+
+
+
+                </div>
+    </div>
+{% endblock %}

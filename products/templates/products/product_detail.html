@@ -1,0 +1,568 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+<script>
+{% block jquery %}
+
+
+function setPrice(){
+	var price = $(".variation_select option:selected").attr("data-price");
+
+	var sale_price = $(".variation_select option:selected").attr("data-sale-price");
+	if (sale_price != "" && sale_price != "None" && sale_price != null ) {
+	$("#price").html("<h3 class='current-price'>" + sale_price + " <small class='og-price'>" + price  + "</small></h3>");
+	} else {
+	$("#price").html(price);
+	}
+}
+setPrice();
+
+$(".variation_select").change(function(){
+	setPrice();
+	// var img = $(".variation_select option:selected").attr("data-img")
+	// $("img").attr("src", img);
+
+});
+
+
+
+// ajax add to cart
+
+$("#submit-btn").click(function(event){
+	event.preventDefault();
+	var formData = $("#add-form").serialize();
+	console.log(formData);
+	$.ajax({
+		type: "GET", // "POST"
+		url: "{% url 'cart' %}",
+		data: formData,
+		success: function(data) {
+			showFlashMessage(data.flash_message);
+			updateCartItemCount();
+		},
+		error: function(response, error) {
+			// console.log(response)
+			// console.log(error)
+			$("#add-form").submit()
+		}
+	});
+
+	// $("#add-form").submit()
+
+});
+
+
+
+{% endblock %}
+</script>
+
+{% block container %}
+
+<section class="page-content">
+			<div class="container">
+	            <div class="row">
+					<div class="col-md-12">
+						<ul class="page-menu">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="#">cameras & photography</a></li>
+							<li class="active"><a href="#">Toch Prond</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+					<!-- CATEGORY-MENU-LIST START -->
+                        {% include "products/category.html" %}
+						<!-- END CATEGORY-MENU-LIST --><!-- END CATEGORY-MENU-LIST -->
+						<!-- START SMALL-PRODUCT-AREA -->
+						<div class="small-product-area carosel-navigation hidden-sm hidden-xs">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="area-title">
+										<h3 class="title-group gfont-1">Bestseller</h3>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="active-bestseller sidebar">
+									<div class="col-xs-12">
+										<!-- Start Single-Product -->
+										<div class="single-product">
+											<div class="product-img">
+												<a href="#">
+													<img class="primary-img" src="{% static 'img/product/small/1.jpg' %}" alt="Product">
+												</a>
+											</div>
+											<div class="product-description">
+												<h5><a href="#">Various Versions</a></h5>
+												<div class="price-box">
+													<span class="price">$90.00</span>
+													<span class="old-price">$110.00</span>
+												</div>
+												<span class="rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star-o"></i>
+												</span>
+											</div>
+										</div>
+										<!-- End Single-Product -->
+										<!-- Start Single-Product -->
+										<div class="single-product">
+											<div class="product-img">
+												<a href="#">
+													<img class="primary-img" src="{% static 'img/product/small/2.jpg' %}" alt="Product">
+												</a>
+											</div>
+											<div class="product-description">
+												<h5><a href="#">Established Fact</a></h5>
+												<div class="price-box">
+													<span class="price">$99.00</span>
+													<span class="old-price">$110.00</span>
+												</div>
+												<span class="rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star-o"></i>
+												</span>
+											</div>
+										</div>
+										<!-- End Single-Product -->
+										<!-- Start Single-Product -->
+										<div class="single-product">
+											<div class="product-img">
+												<a href="#">
+													<img class="primary-img" src="{% static 'img/product/small/3.jpg' %}" alt="Product">
+												</a>
+											</div>
+											<div class="product-description">
+												<h5><a href="#">Various Versions</a></h5>
+												<div class="price-box">
+													<span class="price">$90.00</span>
+													<span class="old-price">$110.00</span>
+												</div>
+												<span class="rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star-o"></i>
+												</span>
+											</div>
+										</div>
+										<!-- End Single-Product -->
+										<!-- Start Single-Product -->
+										<div class="single-product">
+											<div class="product-img">
+												<a href="#">
+													<img class="primary-img" src="{% static 'img/product/small/4.jpg' %}" alt="Product">
+												</a>
+											</div>
+											<div class="product-description">
+												<h5><a href="#">Established Fact</a></h5>
+												<div class="price-box">
+													<span class="price">$99.00</span>
+													<span class="old-price">$110.00</span>
+												</div>
+												<span class="rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star-o"></i>
+												</span>
+											</div>
+										</div>
+										<!-- End Single-Product -->
+									</div>
+									<div class="col-xs-12">
+										<!-- Start Single-Product -->
+										<div class="single-product">
+											<div class="product-img">
+												<a href="#">
+													<img class="primary-img" src="{% static 'img/product/small/5.jpg' %}" alt="Product">
+												</a>
+											</div>
+											<div class="product-description">
+												<h5><a href="#">Various Versions</a></h5>
+												<div class="price-box">
+													<span class="price">$90.00</span>
+													<span class="old-price">$110.00</span>
+												</div>
+												<span class="rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star-o"></i>
+												</span>
+											</div>
+										</div>
+										<!-- End Single-Product -->
+										<!-- Start Single-Product -->
+										<div class="single-product">
+											<div class="product-img">
+												<a href="#">
+													<img class="primary-img" src="{% static 'img/product/small/6.jpg' %}" alt="Product">
+												</a>
+											</div>
+											<div class="product-description">
+												<h5><a href="#">Established Fact</a></h5>
+												<div class="price-box">
+													<span class="price">$99.00</span>
+													<span class="old-price">$110.00</span>
+												</div>
+												<span class="rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star-o"></i>
+												</span>
+											</div>
+										</div>
+										<!-- End Single-Product -->
+										<!-- Start Single-Product -->
+										<div class="single-product">
+											<div class="product-img">
+												<a href="#">
+													<img class="primary-img" src="{% static 'img/product/small/7.jpg' %}" alt="Product">
+												</a>
+											</div>
+											<div class="product-description">
+												<h5><a href="#">Various Versions</a></h5>
+												<div class="price-box">
+													<span class="price">$90.00</span>
+													<span class="old-price">$110.00</span>
+												</div>
+												<span class="rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star-o"></i>
+												</span>
+											</div>
+										</div>
+										<!-- End Single-Product -->
+										<!-- Start Single-Product -->
+										<div class="single-product">
+											<div class="product-img">
+												<a href="#">
+													<img class="primary-img" src="{% static 'img/product/small/8.jpg' %}" alt="Product">
+												</a>
+											</div>
+											<div class="product-description">
+												<h5><a href="#">Established Fact</a></h5>
+												<div class="price-box">
+													<span class="price">$99.00</span>
+													<span class="old-price">$110.00</span>
+												</div>
+												<span class="rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star-o"></i>
+												</span>
+											</div>
+										</div>
+										<!-- End Single-Product -->
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- END SMALL-PRODUCT-AREA -->
+						<!-- START SIDEBAR-BANNER -->
+	                    <div class="sidebar-banner hidden-sm hidden-xs">
+	                    	<div class="active-sidebar-banner">
+	                    		<div class="single-sidebar-banner">
+	                    			<a href="#"><img src="{% static 'img/banner/1.jpg' %}" alt="Product Banner"></a>
+	                    		</div>
+	                    		<div class="single-sidebar-banner">
+	                    			<a href="#"><img src="{% static 'img/banner/2.jpg' %}" alt="Product Banner"></a>
+	                    		</div>
+	                    	</div>
+	                    </div>
+	                    <!-- END SIDEBAR-BANNER -->
+					</div>
+					<div class="col-md-9 col-sm-12 col-xs-12">
+						<!-- Start Toch-Prond-Area -->
+						<div class="toch-prond-area">
+							<div class="row">
+								<div class="col-md-5 col-sm-5 col-xs-12">
+									<div class="clear"></div>
+
+                                 {% if product.productimage_set.count > 0 %}
+									<div class="tab-content">
+
+										<!-- Product = display-1-1 -->
+										<div role="tabpanel" class="tab-pane fade in active" id="{{ product.id }}">
+											<div class="row">
+												<div class="col-xs-12">
+													<div class="toch-photo">
+														<a href="{{ product.get_absolute_url }}"><img src="{{ product.get_image_url }}" data-imagezoom="true" alt="#" /></a>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- End Product = display-1-1 -->
+										<!-- Start Product = display-1-2 -->
+
+										<!-- End Product = display-1-2 -->
+										<!-- Start Product = di3play-1-3 -->
+
+										<!-- End Product = display-1-3 -->
+										<!-- Start Product = di3play-1-4 -->
+
+										<!-- End Product = display-1-4 -->
+									</div>
+                                     {% for img in product.productimage_set.all %}
+									<!-- Start Toch-prond-Menu -->
+									<div class="toch-prond-menu">
+										<ul role="tablist">
+{#											<li role="presentation" class=" active"><a href="#display-1" role="tab" data-toggle="tab"><img src="img/toch/1.jpg" alt="#" /></a></li>#}
+											<li role="presentation" class=" active"><a href="#{{ product.id }}" role="tab" data-toggle="tab"><img src="{{ img.image.url }}" alt="#" /></a></li>
+{#											<li role="presentation"><a href="#display-3"  role="tab" data-toggle="tab"><img src="img/toch/3.jpg" alt="#" /></a></li>#}
+{#											<li role="presentation"><a href="#display-4"  role="tab" data-toggle="tab"><img src="img/toch/4.jpg" alt="#" /></a></li>#}
+    								</ul>
+									</div>
+									<!-- End Toch-prond-Menu -->
+                                     {% endfor %}
+                                    {% endif %}
+								</div>
+
+
+								<div class="col-md-7 col-sm-7 col-xs-12">
+									<h2 class="title-product"> {{ object }}</h2>
+									<div class="about-toch-prond">
+										<p>
+											<span class="rating">
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star-o"></i>
+											</span>
+											<a href="#">1 reviews</a>
+											/
+											<a href="#">Write a review</a>
+										</p>
+										<hr />
+										<p class="short-description">{{ product.description | truncatechars:320 }}</p>
+										<hr />
+
+
+
+                                                    {% if product.active %}
+                                                        <span class="item-stock">Availability: <span class="text-stock">In Stock</span></span>
+                                                        {% else %}
+                                                        <span class="item-stock">Availability: <span class="text-stock">Not in Stock</span></span>
+                                                    {% endif %}
+
+									</div>
+
+                                    <form id='add-form' method='GET' action="{% url 'cart' %}">
+                                        <p id='jquery-message' class='lead'>
+
+                                        </p>
+                                        {% if object.variation_set.count > 1 %}
+                                        <h3 id='price' class='current-price'>{{ object.variation_set.first.price }}</h3>
+
+                                        <select name='item' class='form-control variation_select'>
+                                            {% for vari_obj in object.variation_set.all %}
+                                            <!-- <option data-img="http://www.spirit1059.com/pics/Feeds/Articles/2015611/118317/Beach.jpg" data-price="{{ vari_obj.price }}" value="{{ vari_obj.id }}">{{ vari_obj }}</option> -->
+                                            <option  data-sale-price="{{ vari_obj.sale_price }}" data-price="{{ vari_obj.price }}" value="{{ vari_obj.id }}">{{ vari_obj }}</option>
+                                            {% endfor %}
+                                            </select>
+
+                                        {% else %}
+                                            <input type="hidden" name='item' value='{{ object.variation_set.first.id }}' />
+                                                <h3 id='price' class='current-price'>{% if object.variation_set.first.sale_price %}
+                                                {{ object.variation_set.first.sale_price  }}
+                                                <small class='og-price'>{{ object.variation_set.first.price }}</small>
+                                                {% else %}
+
+                                                {{ object.variation_set.first.price }}
+                                                {% endif %}
+                                            </h3>
+
+
+                                        {% endif %}
+                                        <br/>
+                                            <div class="product-quantity">
+                                                <span>Qty</span>
+
+                                                <input type='number' name='qty' value='1' placeholder="1" />
+                                                <button type="submit" class="toch-button toch-add-cart">Add to Cart</button>
+
+                                                <hr />
+
+                                            </div>
+                                    </form>
+
+                                    <form action="{% url "wishlist_add" product.id %}" method="post">
+
+                                        <div class="product-quantity">
+
+                                                <input type='hidden' name='quantity' value='1' placeholder="1" />
+                                                <button type="submit" class="toch-button toch-wishlist">Add to Wishlist</button>
+
+                                                <hr />
+                                            {% csrf_token %}
+                                            </div>
+
+                                    </form>
+
+								</div>
+							</div>
+							<!-- Start Toch-Box -->
+							<div class="toch-box">
+								<div class="row">
+									<div class="col-xs-12">
+										<!-- Start Toch-Menu -->
+										<div class="toch-menu">
+											<ul role="tablist">
+												<li role="presentation" class=" active"><a href="#description" role="tab" data-toggle="tab">Description</a></li>
+												<li role="presentation"><a href="#reviews" role="tab" data-toggle="tab">Reviews (1)</a></li>
+											</ul>
+										</div>
+										<!-- End Toch-Menu -->
+										<div class="tab-content toch-description-review">
+											<!-- Start display-description -->
+											<div role="tabpanel" class="tab-pane fade in active" id="description">
+												<div class="row">
+													<div class="col-xs-12">
+														<div class="toch-description">
+															<p>{{ product.description }}</p>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- End display-description -->
+											<!-- Start display-reviews -->
+											<div role="tabpanel" class="tab-pane fade" id="reviews">
+												<div class="row">
+													<div class="col-xs-12">
+														<div class="toch-reviews">
+															<div class="toch-table">
+																<table class="table table-striped table-bordered">
+																	<tbody>
+																		<tr>
+																			<td><strong>plaza theme</strong></td>
+																			<td class="text-right"><strong>16/02/2016</strong></td>
+																		</tr>
+																		<tr>
+																			<td colspan="2">
+																				<p>It is part of Australia's network of offshore processing centres for irregular migrants who arrive by boat, and also houses New Zealanders facing deportation from Australia.</p>
+																				<span><i class="fa fa-star"></i></span>
+																				<span><i class="fa fa-star"></i></span>
+																				<span><i class="fa fa-star"></i></span>
+																				<span><i class="fa fa-star"></i></span>
+																				<span><i class="fa fa-star-o"></i></span>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+															<div class="toch-review-title">
+																<h2>Write a review</h2>
+															</div>
+															<div class="review-message">
+																<div class="col-xs-12">
+																	<p><sup>*</sup>Your Name <br>
+																		<input type="text" class="form-control" />
+																	</p>
+																	<p><sup>*</sup>Your Name <br>
+																		<textarea class="form-control"></textarea>
+																	</p>
+																</div>
+																<div class="help-block">
+																	<span class="note">Note:</span>
+																	 HTML is not translated!
+																</div>
+																<div class="get-rating">
+																	<span><sup>*</sup>Rating </span>
+																	Bad
+																	<input type="radio" value="1" name="rating" />
+																	<input type="radio" value="2" name="rating" />
+																	<input type="radio" value="3" name="rating" />
+																	<input type="radio" value="4" name="rating" />
+																	<input type="radio" value="5" name="rating" />
+																	Good
+																</div>
+																<div class="buttons clearfix">
+																	<button class="btn btn-primary pull-right">Continue</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- End Product = display-reviews -->
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- End Toch-Box -->
+							<!-- START PRODUCT-AREA -->
+							<div class="product-area">
+								<div class="row">
+									<div class="col-xs-12 col-md-12">
+										<!-- Start Product-Menu -->
+										<div class="product-menu">
+											<div class="product-title">
+												<h3 class="title-group-2 gfont-1">Related Products</h3>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- End Product-Menu -->
+								<div class="clear"></div>
+								<!-- Start Product -->
+								<div class="product carosel-navigation">
+									<div class="row">
+										<div class="active-product-carosel">
+                                            {% for product in related %}
+											<!-- Start Single-Product -->
+											<div class="col-xs-12">
+												<div class="single-product">
+													<div class="product-img">
+														<a href="{{ product.get_absolute_url }}">
+															<img class="primary-img" src="{{ product.get_image_url }}" alt="Product">
+														</a>
+													</div>
+													<div class="product-description">
+														<h5><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h5>
+														<div class="price-box">
+															<span class="price">{{ product.sale_price }}</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- End Single-Product -->
+											{% endfor %}
+
+										</div>
+									</div>
+
+								</div>
+								<!-- End Product -->
+							</div>
+							<!-- END PRODUCT-AREA -->
+						</div>
+						<!-- End Toch-Prond-Area -->
+					</div>
+				</div>
+			</div>
+			<!-- START BRAND-LOGO-AREA -->
+            {% include "brands.html" %}
+			<!-- END BRAND-LOGO-AREA -->
+			<!-- START SUBSCRIBE-AREA -->
+			{% include "subscribe.html" %}
+			<!-- END SUBSCRIBE-AREA -->
+		</section>
+{% endblock %}

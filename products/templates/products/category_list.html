@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block container %}
+    <section class="page-content">
+			<div class="container">
+	            <div class="row">
+					<div class="col-md-12">
+						<ul class="page-menu">
+							<li><a href="{% url 'products' %}">Home</a></li>
+							<li class="active"><a href="#">Bestseller Product</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<!-- CATEGORY-MENU-LIST START -->
+                        {% include "products/category.html" %}
+						<!-- END CATEGORY-MENU-LIST -->
+						<!-- shop-filter start -->
+						<div class="shop-filter">
+							<div class="area-title">
+								<h3 class="title-group gfont-1">Filters Products</h3>
+							</div>
+{#							<h4 class="shop-price-title">Price</h4>#}
+							<div class="info_widget">
+								<div class="price_filter">
+									<form method="GET" action="{% url 'products' %}">
+                                        {{ filter_form|crispy }}
+                                        <input type='hidden' name='q' value='{{ request.GET.q }}' />
+                                        <input type='submit' value='Apply Filter' class="toch-button toch-add-cart">
+
+                                    </form>
+
+								</div>
+                                <br/>
+                                <button type="submit" class="toch-button toch-wishlist"><a href="{% url 'products' %}">Clear Filters</a></button>
+
+							</div>
+						</div>
+						<!-- shop-filter start -->
+
+					</div>
+					<div class="col-md-9 col-xs-12">
+						<!-- START PRODUCT-BANNER -->
+						<div class="product-banner">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="banner">
+										<a href="#"><img src="{% static 'img/banner/12.jpg' %}" alt="Product Banner"></a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- END PRODUCT-BANNER -->
+
+                 </div>
+				</div>
+			</div>
+			<!-- START BRAND-LOGO-AREA -->
+			{% include "brands.html" %}
+			<!-- END BRAND-LOGO-AREA -->
+			<!-- START SUBSCRIBE-AREA -->
+			{% include "subscribe.html" %}
+			<!-- END SUBSCRIBE-AREA -->
+		</section>
+{% endblock %}

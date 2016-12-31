@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block container %}
+    <section class="page-content">
+			<div class="container">
+	            <div class="row">
+					<div class="col-md-12">
+						<ul class="page-menu">
+							<li><a href="{% url 'products' %}">Home</a></li>
+							<li class="active"><a href="{% url 'categories' %}">Category</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<!-- CATEGORY-MENU-LIST START -->
+                        {% include "products/category.html" %}
+						<!-- END CATEGORY-MENU-LIST -->
+						<!-- shop-filter start -->
+						<div class="shop-filter">
+							<div class="area-title">
+								<h3 class="title-group gfont-1">Filters Products</h3>
+							</div>
+{#							<h4 class="shop-price-title">Price</h4>#}
+							<div class="info_widget">
+								<div class="price_filter">
+									<form method="GET" action="{% url 'products' %}">
+                                        {{ filter_form|crispy }}
+                                        <input type='hidden' name='q' value='{{ request.GET.q }}' />
+                                        <input type='submit' value='Apply Filter' class="toch-button toch-add-cart">
+
+                                    </form>
+
+								</div>
+                                <br/>
+                                <button type="submit" class="toch-button toch-wishlist"><a href="{% url 'products' %}">Clear Filters</a></button>
+
+							</div>
+						</div>
+						<!-- shop-filter start -->
+
+					</div>
+					<div class="col-md-9 col-xs-12">
+						<!-- START PRODUCT-BANNER -->
+						<div class="product-banner">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="banner">
+										<a href="#"><img src="{% static 'img/banner/12.jpg' %}" alt="Product Banner"></a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- END PRODUCT-BANNER -->
+						<!-- START PRODUCT-AREA -->
+						<div class="product-area">
+							<div class="row">
+								<div class="col-xs-12">
+									<!-- Start Product-Menu -->
+									<div class="product-menu">
+										<div class="product-title">
+											<h3 class="title-group-3 gfont-1">{{ object }}</h3>
+										</div>
+									</div>
+									<div class="product-filter">
+										<ul role="tablist">
+											<li role="presentation" class="list">
+												<a href="#display-1-1" role="tab" data-toggle="tab"></a>
+											</li>
+											<li role="presentation"  class="grid active">
+												<a href="#display-1-2" role="tab" data-toggle="tab"></a>
+											</li>
+										</ul>
+{#										<div class="sort">#}
+{#											<label>Sort By:</label>#}
+{#											<select>#}
+{#												<option value="#">Default</option>#}
+{#												<option value="#">Name (A - Z)</option>#}
+{#											</select>#}
+{#										</div>#}
+{#										<div class="limit">#}
+{#											<label>Show:</label>#}
+{#											<select>#}
+{#												<option value="#">8</option>#}
+{#												<option value="#">16)</option>#}
+{#												<option value="#">24</option>#}
+{#												<option value="#">40</option>#}
+{#												<option value="#">80</option>#}
+{#												<option value="#">100</option>#}
+{#											</select>#}
+{#										</div>#}
+									</div>
+
+									<!-- End Product-Menu -->
+									<div class="clear"></div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 col-md-12">
+									<!-- Start Product -->
+									<div class="product">
+										<div class="tab-content">
+                                            <!-- Start Product-->
+											<div role="tabpanel" class="tab-pane fade in  active" id="display-1-2">
+												<div class="row">
+                                                {% for product in object_list %}
+
+													<!-- Start Single-Product -->
+													<div class="col-md-3 col-sm-4 col-xs-12">
+														<div class="single-product">
+                                                            {% if product.new %}
+															<div class="label_new">
+																<span class="new">new</span>
+															</div>
+                                                            {% endif %}
+                                                            {% if product.sale_price != product.price %}
+															<div class="sale-off">
+																<span class="sale-percent">-{{ product.discount }}%</span>
+															</div>
+                                                            {% endif %}
+															<div class="product-img">
+																<a href="{{ product.get_absolute_url }}">
+																	<img class="primary-img" src="{{ product.get_image_url }}" alt="Product">
+																	<img class="secondary-img" src="{{ product.get_image_url }}" alt="Product">
+																</a>
+															</div>
+															<div class="product-description">
+																<h5><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h5>
+																<div class="price-box">
+																	<span class="price">{{ product.sale_price }}</span>
+                                                                    {% if product.sale_price != product.price %}
+                                                                    <span class="old-price">{{ product.price }}</span>
+                                                                     {% endif %}
+																</div>
+																<span class="rating">
+																	<i class="fa fa-star"></i>
+																	<i class="fa fa-star"></i>
+																	<i class="fa fa-star"></i>
+																	<i class="fa fa-star"></i>
+																	<i class="fa fa-star-o"></i>
+																</span>
+															</div>
+															<div class="product-action">
+																<div class="button-group">
+																	<div class="product-button">
+																		<button><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+																	</div>
+                                                     <!--
+																	<div class="product-button-2">
+																		<a href="#" data-toggle="tooltip" title="Wishlist"><i class="fa fa-heart-o"></i></a>
+																		<a href="#" data-toggle="tooltip" title="Compare"><i class="fa fa-signal"></i></a>
+																		<a href="#" class="modal-view" data-toggle="modal" data-target="#productModal"><i class="fa fa-search-plus"></i></a>
+																	</div>
+                                                     -->
+																</div>
+															</div>
+														</div>
+													</div>
+													<!-- End Single-Product -->
+
+                                                {% endfor %}
+
+												</div>
+												<!-- Start Pagination Area -->
+												<div class="pagination-area">
+
+													<div class="row">
+                                                     <!--
+														<div class="col-xs-5">
+															<div class="pagination">
+																<ul>
+                                                                <li><a href="{% url 'products' %}?page=1">|<</a></li>
+                                                                    {% for page in page_range %}
+																	<li ><a href="{% url 'products' %}?page={{ page }}">{{ page }}</a></li>
+																	{% endfor %}
+																	<li><a href="{% url 'products' %}?page={{ num_pages }}">>|</a></li>
+																</ul>
+															</div>
+														</div>
+-->
+														<div class="col-xs-7">
+															<div class="product-result">
+																<span>Showing 1 to {{ object_list.count }} of {{ total_products }} products</span>
+															</div>
+														</div>
+													</div>
+												</div>
+												<!-- End Pagination Area -->
+
+											</div>
+											<!-- End Product = TV -->
+										</div>
+									</div>
+									<!-- End Product -->
+								</div>
+							</div>
+						</div>
+						<!-- END PRODUCT-AREA -->
+					</div>
+				</div>
+			</div>
+			<!-- START BRAND-LOGO-AREA -->
+			{% include "brands.html" %}
+			<!-- END BRAND-LOGO-AREA -->
+			<!-- START SUBSCRIBE-AREA -->
+			{% include "subscribe.html" %}
+			<!-- END SUBSCRIBE-AREA -->
+		</section>
+
+{% endblock %}
+

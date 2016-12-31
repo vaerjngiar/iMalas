@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+<script>
+
+    {% block jquery %}
+        function initialize() {
+				var mapOptions = {
+					zoom: 5,
+					scrollwheel: false,
+					center: new google.maps.LatLng(46.99887056, 28.84941101)
+				};
+
+				var map = new google.maps.Map(document.getElementById('googleMap'),
+					mapOptions);
+
+				var marker = new google.maps.Marker({
+					position: map.getCenter(),
+					animation:google.maps.Animation.BOUNCE,
+					icon: 'img/map-marker.png',
+					map: map
+				});
+			}
+
+			google.maps.event.addDomListener(window, 'load', initialize);
+    {% endblock %}
+</script>
+
+{% block container %}
+    <section class="page-content">
+			<div class="container">
+	            <div class="row">
+					<div class="col-md-12">
+						<ul class="page-menu">
+							<li><a href="{% url 'products' %}">Home</a></li>
+							<li class="active"><a href="{% url 'contact' %}">Contact</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<!-- CATEGORY-MENU-LIST START -->
+                        {% include "products/category.html" %}
+						<!-- END CATEGORY-MENU-LIST -->
+						<!-- shop-filter start -->
+
+						<!-- shop-filter start -->
+
+					</div>
+					<div class="col-md-9">
+						<!-- Start Map area -->
+						<div class="map-area">
+							<div id="googleMap" style="width:100%;height:350px;"></div>
+						</div>
+						<!-- End Map area -->
+						<!-- Start Contact-Message -->
+						<div class="contact-message">
+							<fieldset>
+								<form method="post" action=" ">{% csrf_token %}
+									<legend>Contact Form</legend>
+									<div class="form-group form-horizontal">
+										<div class="row">
+											<label class="col-sm-2 control-label">Your Name</label>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" placeholder="Type your name" name="name"/>
+											</div>
+										</div>
+									</div>
+									<div class="form-group form-horizontal">
+										<div class="row">
+											<label class="col-sm-2 control-label"><sup>*</sup>E-Mail Address</label>
+											<div class="col-sm-10">
+												<input class="form-control" type="email" placeholder="Type your email" name="sender"/>
+											</div>
+										</div>
+									</div>
+									<div class="form-group form-horizontal">
+										<div class="row">
+											<label class="col-sm-2 control-label"><sup>*</sup>Enquiry</label>
+											<div class="col-sm-10">
+												<textarea class="form-control" rows="10" name="message"></textarea>
+											</div>
+										</div>
+									</div>
+									<div class="buttons pull-right">
+										<input class="btn btn-primary" type="submit" value="submit" name="submit"/>
+									</div>
+								</form>
+							</fieldset>
+						</div>
+						<!-- End Contact-Message -->
+
+					</div>
+				</div>
+			</div>
+			<!-- START BRAND-LOGO-AREA -->
+			{% include "brands.html" %}
+			<!-- END BRAND-LOGO-AREA -->
+			<!-- START SUBSCRIBE-AREA -->
+
+			{% include "signup.html" %}
+			<!-- END SUBSCRIBE-AREA -->
+</section>
+{% endblock %}

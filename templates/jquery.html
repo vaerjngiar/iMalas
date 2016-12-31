@@ -1,0 +1,87 @@
+{% load staticfiles %}
+<!-- jquery
+		============================================ -->
+        <script src="{% static 'js/jquery-1.11.3.min.js' %}"></script>
+		<!-- bootstrap JS
+		============================================ -->
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+		<!-- wow JS
+		============================================ -->
+        <script src="{% static 'js/wow.min.js' %}"></script>
+		<!-- meanmenu JS
+		============================================ -->
+        <script src="{% static 'js/jquery.meanmenu.js' %}"></script>
+		<!-- owl.carousel JS
+		============================================ -->
+        <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+		<!-- scrollUp JS
+		============================================ -->
+        <script src="{% static 'js/jquery.scrollUp.min.js' %}"></script>
+        <!-- countdon.min JS
+		============================================ -->
+        <script src="{% static 'js/countdon.min.js' %}"></script>
+        <!-- jquery-price-slider js
+		============================================ -->
+        <script src="{% static 'js/jquery-price-slider.js' %}"></script>
+        <!-- Nivo slider js
+		============================================ -->
+		<script src="{% static 'js/jquery.nivo.slider.js' %}" type="text/javascript"></script>
+		<!-- plugins JS
+		============================================ -->
+        <script src="{% static 'js/plugins.js' %}"></script>
+		<!-- main JS
+		============================================ -->
+        <script src="{% static 'js/main.js' %}"></script>
+        <!-- JQUERY
+		============================================ -->
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+
+ <script>
+
+     function updateCartItemCount(){
+     	var badge = $("#cart-count-badge");
+
+     	$.ajax({
+     		type: "GET",
+     		url: "{% url 'item_count' %}",
+     		success: function(data){
+     			badge.text(data.count);
+     			console.log(data.count);
+     		},
+     		error: function(response, error) {
+     			console.log(response);
+     			console.log(error);
+     		}
+
+     	})
+
+     }
+     $(document).ready(function(){
+
+     	updateCartItemCount()
+     })
+
+     </script>
+
+<script>
+    $(document).ready(function(){
+        var badge = $("#top-cart-price");
+        $.ajax({
+            type: "GET",
+            url: "{% url 'total_sum' %}",
+            success: function (data) {
+                badge.text(data.total_sum);
+                console.log(data.total_sum);
+
+            },
+            error: function(response, error) {
+     			console.log(response);
+     			console.log(error);
+     		}
+
+
+        })
+
+
+    })
+</script>
